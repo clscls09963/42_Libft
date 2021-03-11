@@ -3,48 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyeykim <hyeykim@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: hyeykim <hyeykim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 17:42:54 by hyeykim           #+#    #+#             */
-/*   Updated: 2021/01/13 18:03:53 by hyeykim          ###   ########.fr       */
+/*   Updated: 2021/02/25 23:18:10 by hyeykim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		writenbr(int n, int fd)
+char		output_select(int idx, char *str)
 {
-	size_t	i;
-	char	nbr[11];
-
-	i = 11;
-	while (i-- >= 0)
-	{
-		nbr[i] = n % 10 + '0';
-		n /= 10;
-		if (n == 0)
-		{
-			while (i <= 10)
-			{
-				write(fd, &nbr[i], 1);
-				i++;
-			}
-			break ;
-		}
-	}
+	return (str[idx]);
 }
 
-void		ft_putnbr_fd(int n, int fd)
+void		ft_putnbr(unsigned int n, int base, int alphacase)
 {
-	if (n == -2147483648)
+	if (n < (unsigned int)base)
 	{
-		write(fd, "-2147483648", 11);
-		return ;
+		if (base == 10)
+			ft_putchar('0' + n);
+		else if (alphacase == 1)
+			ft_putchar(output_select(n, "0123456789abcdef"));
+		else
+			ft_putchar(output_select(n, "0123456789ABCDEF"));
 	}
-	if (n < 0)
+	else
 	{
-		write(fd, "-", 1);
-		n *= -1;
+		ft_putnbr(n / base, base, alphacase);
+		ft_putnbr(n % base, base, alphacase);
 	}
-	writenbr(n, fd);
 }
